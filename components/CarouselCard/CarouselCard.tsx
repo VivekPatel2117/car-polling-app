@@ -19,15 +19,15 @@ export function CarouselCard({...props}) {
           align: "start",
         }}
         orientation="vertical"
-        className="h-[60vh] w-[60vw]"
+        className="h-[60vh] w-[65vw] mb-1"
       >
-        <CarouselContent className="-mt-1 h-[60vh]">
+        <CarouselContent className="-mt-1 h-[65vh]">
           {Array.from({ length: 5 }).map((_, index) => (
-            <CarouselItem key={index} className="pt-1 h-[45vh] w-full">
-                <Card className="h-full w-full">
-                  <CardContent className="flex items-center justify-center p-6">
-                  <div className="h-full w-full grid">
-                        <Image src={props.ImgArr[index]} alt="Image" className="h-[40vh] w-full rounded-md object-cover" />
+            <CarouselItem key={index} className="h-full p-0 w-full">
+                <Card className="h-[60vh] w-full mt-1 mb-1">
+                  <CardContent className="flex items-center justify-center">
+                  <div className="h-full w-full grid items-center mt-4">
+                        <Image src={props.ImgArr[index]} alt="Image" className="h-[55vh] w-full rounded-md object-cover" />
                         <div className="text-content">
                            {props.name}
                         </div>

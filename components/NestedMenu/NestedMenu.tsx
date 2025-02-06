@@ -18,7 +18,7 @@ type NestedMenuProps = {
 export const NestedMenu = ({ ...props }: NestedMenuProps) => {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex items-center gap-1">{props.triggerName} <ChevronDown size={"20"} color="#98989f"/></DropdownMenuTrigger>
+      <DropdownMenuTrigger className="flex items-center gap-1 outline-none">{props.triggerName} <ChevronDown size={"20"} color="#98989f"/></DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>{props.triggerName}</DropdownMenuLabel>
         <DropdownMenuSeparator />

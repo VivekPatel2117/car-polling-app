@@ -18,19 +18,21 @@ import Google from "../public/Google.svg";
 import GoogleDark from "../public/Google-dark.svg";
 import GithubDark from "../public/Github-dark.svg"
 import Github from "../public/Github.svg";
+import Spinner from "./Spinner";
 
 type LoginFormProps = React.ComponentPropsWithoutRef<"div"> & {
   onFormSubmit: (formData: { email: string; password: string }) => void;
+  isLoading: Boolean;
 };
 export function LoginForm({
   className,
   onFormSubmit,
+  isLoading,
   ...props 
 }: LoginFormProps ) {
   const { toast } = useToast()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault(); 
     if(!email || !password){
@@ -67,7 +69,7 @@ export function LoginForm({
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
                   <Link
-                    href="#"
+                    href="/Forgot"
                     className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
                   >
                     Forgot your password?
@@ -76,7 +78,9 @@ export function LoginForm({
                 <Input onChange={(e)=>setPassword(e.target.value)} id="password" type="password" required />
               </div>
               <Button type="submit" className="w-full">
-                Login
+               {isLoading ? (
+                  <Spinner isOpen={isLoading} />
+               ): "Login"}
               </Button>
               <div className="grid grid-cols-2 gap-4">
               <Button>
