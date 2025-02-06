@@ -5,8 +5,10 @@ import { ToggleButton } from "../ToogleButton";
 import { NestedMenu } from "../NestedMenu/NestedMenu";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Slider from "@/components/profileslider/slider";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 export const Navbar = () => {
+  const [slider, setSlider] = useState(false);
   const router = useRouter();
   const NestMenuArr = [
     {
@@ -24,13 +26,13 @@ export const Navbar = () => {
     {
       name: "Manage orders",
       clickFunc: () => {
-        router.push("/manageorders");
+        router.push("/order");
       },
     },
     {
       name: "Your orders",
       clickFunc: () => {
-        router.push("/orders");
+        router.push("/myorder");
       },
     },
   ];
@@ -61,7 +63,7 @@ export const Navbar = () => {
             <Link href={"/Bookcar"}>Book car</Link>
           </li>
           {(profile!= null && profile) ? (
-            <li>
+            <li onClick={() => setSlider(true)}>
                 <Avatar>
                   <AvatarImage src={profile}></AvatarImage>
                   <AvatarFallback>Profile</AvatarFallback>
@@ -79,6 +81,9 @@ export const Navbar = () => {
           )}
         </ul>
       </nav>
+      {slider && (
+        <Slider open={slider} setOpen={setSlider} />
+      )}
     </div>
   );
 };

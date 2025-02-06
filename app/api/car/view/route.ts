@@ -1,22 +1,25 @@
 import { NextResponse, NextRequest } from "next/server";
 import { PrismaClient } from "@prisma/client";
-
+import { ObjectId } from "mongodb";
 const prisma = new PrismaClient();
-
+interface user {
+  id: string;
+  username: string;
+  emial: string;
+  profile: string;
+}
 export async function GET(req:NextRequest) {
   try {
-     // Get user ID from middleware-injected headers
-     const user = req.headers.get("X-User-Id");
-     console.log("USER",user,req)
-     // return NextResponse.json(req,{status:201})
+     const user: user = JSON.parse(req.headers.get("X-User-Id") || "{}");
      if (!user) {
        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
      }
  
-    // Fetch all cars where `createdBy` is null
     const carsDisplay = await prisma.car.findMany({
       where: {
-        createdBy: user, // Filtering cars where `createdBy` is NOT set
+        createdBy: {
+          not: user.id,
+        }
       },
     });
 

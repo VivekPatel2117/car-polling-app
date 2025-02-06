@@ -1,0 +1,6 @@
+      PID    PPID    PGID     WINPID   TTY         UID    STIME COMMAND
+      317       1     317       3972  ?         197609 19:01:54 /usr/bin/mintty
+      318     317     318       9708  pty0      197609 19:01:55 /usr/bin/bash
+      341       1     341      10252  cons0     197609 19:57:38 /usr/bin/bash
+      340     318     340      11088  pty0      197609 19:02:10 /usr/bin/ssh
+      388     341     388      14100  cons0     197609 19:57:42 /usr/bin/PS

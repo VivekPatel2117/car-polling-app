@@ -1,15 +1,13 @@
 import { NextResponse,NextRequest } from "next/server";
 import { isAuthenticated } from "@/lib/isAuthenticated";
-import { JwtPayload } from "jsonwebtoken";
 
 // Apply middleware to API routes
 export const config = {
-  matcher: "/api/car/create", // Apply to specific API routes
+  matcher: "/api/car/:path",
 };
 
 export async function middleware(req:NextRequest) {
     const isAuth = await isAuthenticated(req)
-    console.log("AUTH",isAuth)
   if (!isAuth) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -17,7 +15,7 @@ export async function middleware(req:NextRequest) {
   try {
     // Attach user data to request headers
     const requestHeaders = new Headers(req.headers);
-    requestHeaders.set("X-User-Id", String(isAuth));
+    requestHeaders.set("X-User-Id", (isAuth));
 
     return NextResponse.next({
       request: { headers: requestHeaders },
