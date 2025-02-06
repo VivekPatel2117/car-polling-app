@@ -15,7 +15,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <div className="h-[80vh] text-center lg:text-left w-screen pl-4 items-center justify-center grid grid-flow-row lg:grid-cols-2">
+      <div className="h-screen lg:h-[80vh] text-center lg:text-left w-screen pl-4 items-center justify-center grid grid-flow-row lg:grid-cols-2">
         <div className="flex h-full flex-col justify-center">
           <h1 className="text-4xl">Join the Ride, Share the Journey! </h1>
           <h4>
@@ -26,12 +26,12 @@ export default function Home() {
           </h4>
           <p></p>
         </div>
-        <div className="flex justify-center h-full w-full">
+        <div className="flex justify-center h-full lg:w-full w-screen lg:mb-0 mb-10">
           <Image src={Car} className="" alt="Car" />
         </div>
       </div>
-      <div className="flex justify-center h-screen items-center w-screen overflow-x-hidden gap-[2vw]">
-        <div className="h-[70vh] w-[25vw] grid justify-center shadow-xl border rounded-sm text-justify">
+      <div className="flex flex-col lg:flex-row justify-center lg:h-screen items-center w-screen overflow-x-hidden lg:gap-[2vw] gap-10">
+        <div className="lg:h-[70vh] lg:w-[25vw] w-screen grid justify-center shadow-xl border rounded-sm text-justify">
           <Image className="h-40 w-full" src={Car} alt="Car" />
             <h1 className="text-2xl text-center">Rent a car</h1>
             <div className="p-4">
@@ -44,7 +44,7 @@ export default function Home() {
             </p>
           </div>
         </div>
-        <div className="h-[70vh] w-[25vw] grid justify-center shadow-xl border rounded-sm text-justify">
+        <div className="lg:h-[70vh] lg:w-[25vw] w-screen grid justify-center shadow-xl border rounded-sm text-justify">
           <Image className="h-40 w-full" src={Car} alt="Car" />
             <h1 className="row-span-1 text-2xl text-center">Search cars by category</h1>
             <div className="p-4 grid grid-flow-row">
@@ -54,7 +54,7 @@ export default function Home() {
             </p>
           </div>
         </div>
-        <div className="h-[70vh] w-[25vw] grid justify-center shadow-xl border rounded-sm text-justify">
+        <div className="lg:h-[70vh] lg:w-[25vw] w-screen grid justify-center shadow-xl border rounded-sm text-justify">
           <Image className="h-40 w-full" src={Car} alt="Car" />
             <h1 className="text-2xl text-center">Online booking</h1>
           <div className="p-4">
@@ -66,7 +66,7 @@ export default function Home() {
         </div>
        
       </div>
-      <div className="grid grid-flow-row h-[90vh]">
+      <div className="grid grid-flow-row h-[90vh] lg:mt-0 mt-10">
         <h1 className="text-center text-3xl">Top Featured cars</h1>
       <CarouselCard ImgArr={sliderImg}/>
       </div>
