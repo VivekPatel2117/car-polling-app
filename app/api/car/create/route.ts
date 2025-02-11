@@ -1,7 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/prisma/primsa";
 
-const prisma = new PrismaClient();
 interface user {
   id: string;
   username: string;
@@ -10,6 +9,12 @@ interface user {
 }
 export async function POST(req: NextRequest) {
   try {
+    try {
+      await prisma.$connect();
+      console.log("✅ Prisma successfully connected to MongoDB!");
+    } catch (error) {
+      console.error("❌ Failed to connect to MongoDB:", error);
+    } 
     // Get user ID from headers
     const user: user = JSON.parse(req.headers.get("X-User-Id") || "{}");
     console.log("USER:", user);
@@ -26,10 +31,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid JSON payload" }, { status: 400 });
     }
 
-    const { model, type, company, price, image } = body;
-
+    const { model, type, company, price, image, location } = body;
+    console.log("BODY:", body);
     // Validate required fields
-    if (!model || !type || !company || !price || !image) {
+    if (!model || !type || !company || !price || !image || !location) {
       return NextResponse.json({ error: "All fields are required" }, { status: 400 });
     }
 
@@ -41,6 +46,7 @@ export async function POST(req: NextRequest) {
         company,
         price: Number(price),
         image,
+        location, 
         createdBy: user.id, // Use the string directly
       },
     });
@@ -50,11 +56,9 @@ export async function POST(req: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
-    console.error("Error creating car:", error);
-
     // Ensure `error` is always an object
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Server error" },
+      { error: error instanceof Error ? error : "Server error" },
       { status: 500 }
     );
   }

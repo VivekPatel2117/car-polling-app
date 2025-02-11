@@ -1,17 +1,21 @@
 import bcrypt from 'bcryptjs';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/prisma/primsa';
 import { NextRequest, NextResponse } from 'next/server';
-
-const prisma = new PrismaClient();
 
 export async function POST(request: NextRequest) {
   try {
+    try {
+      await prisma.$connect();
+      console.log("✅ Prisma successfully connected to MongoDB!");
+    } catch (error) {
+      console.error("❌ Failed to connect to MongoDB:", error);
+    } 
     const { email, password, username, profile } = await request.json();
     // Check if email and password are provided
     if (!email || !password || !username || !profile) {
       return new Response('Email, password, username, and profile are required', { status: 400 });
     }
-
+    console.log("PROFILE",profile)
     // Check if user already exists by email
     const existingUser = await prisma.user.findUnique({
       where: {
@@ -42,8 +46,7 @@ export async function POST(request: NextRequest) {
       status: 201,
     });
   } catch (error) {
-    console.error(error);
-    return new Response('Internal Server Error', { status: 500 });
+    return new Response(`Internal Server Error ${JSON.stringify(error)}`, { status: 500 });
   } finally {
     await prisma.$disconnect();
   }

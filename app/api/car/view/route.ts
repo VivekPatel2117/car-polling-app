@@ -1,6 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import { ObjectId } from "mongodb";
 const prisma = new PrismaClient();
 interface user {
   id: string;
@@ -25,7 +24,6 @@ export async function GET(req:NextRequest) {
 
     return NextResponse.json({ success: true, data: carsDisplay });
   } catch (error) {
-    console.error("Error fetching cars:", error);
-    return NextResponse.json({ success: false, error: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json({ success: false, error: error }, { status: 500 });
   }
 }

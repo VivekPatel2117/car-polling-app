@@ -1,13 +1,18 @@
 import bcrypt from 'bcryptjs';
-import { PrismaClient } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server'
 import { SignJWT } from 'jose';
+import { prisma } from "@/prisma/primsa"
 
-const prisma = new PrismaClient();
 
 const SECRET_KEY = process.env.JWT_SECRET;
 export async function POST(request: NextRequest) {
   try {
+    try {
+      await prisma.$connect();
+      console.log("✅ Prisma successfully connected to MongoDB!");
+    } catch (error) {
+      console.error("❌ Failed to connect to MongoDB:", error);
+    } 
     const { email, password } =await request.json();
 
     // Check if email and password are provided
@@ -46,8 +51,7 @@ export async function POST(request: NextRequest) {
       status: 200,
     });
   } catch (error) {
-    // console.log(error)
-    return new Response('Internal Server Error', { status: 500 });
+    return new Response(JSON.stringify(error), { status: 500 });
   } finally {
     await prisma.$disconnect();
   }

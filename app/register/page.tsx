@@ -14,7 +14,7 @@ export default function Page() {
     username: string;
   }) => {
     const fileData = formData.file;
-    const fileType = "Image";
+    const fileType = "User";
     uploadToSupabaseStorage({ file: fileData, type: fileType }).then((res) => {
       axios
         .post("/api/register", {
@@ -31,7 +31,9 @@ export default function Page() {
             router.push("/login");
           }
         });
-    });
+    }).catch((err)=>{
+      console.log(err)
+    })
   };
 
   return (

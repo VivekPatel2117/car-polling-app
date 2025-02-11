@@ -16,7 +16,6 @@ import {
 import { Separator } from "@/components/ui/separator";
 import uploadToSupabaseStorage from "@/lib/uploadToSupabase";
 import Link from "next/link";
-import { headers } from "next/headers";
 
 export default function page() {
   const [file, setFile] = useState<any>();
@@ -25,6 +24,7 @@ export default function page() {
   const [company, setCompany] = useState<string>("");
   const [type, setType] = useState<string>("");
   const [price, setPrice] = useState<string>("");
+  const [location, setLocation] = useState<string>("");
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const handleAvatarClick = () => {
@@ -42,16 +42,16 @@ export default function page() {
     }
   };
   const handleCarAddition = () => {
-    if (!company || !model || !type || !price || !carImg) {
+    if (!company || !model || !type || !price || !carImg || !location) {
       toast({
         variant: "destructive",
         description: "Please fill all the feilds",
       });
     }
     const token = localStorage.getItem("token")
-    uploadToSupabaseStorage({file:file,type:"Image"}).then((res)=>{
+    uploadToSupabaseStorage({file:file,type:"Car"}).then((res)=>{
       axios.post("/api/car/create",{
-        model,type,company,price,image:res
+        model,type,company,price,image:res,location
       },
       {
         headers: {
@@ -120,6 +120,7 @@ export default function page() {
                 <p>Type</p>
                 <p>Company</p>
                 <p>Price for day</p>
+                <p>Location</p>
               </div>
               <div className="grid gap-1 grid-rows-4 items-center">
                 <Input
@@ -163,6 +164,16 @@ export default function page() {
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
                   placeholder="Enter price"
+                />
+                <Input
+                  className="w-full"
+                  type="text"
+                  id="location"
+                  name="location"
+                  required
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  placeholder="Enter pickup location of your car"
                 />
               </div>
             </div>
