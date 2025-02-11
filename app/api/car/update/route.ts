@@ -1,7 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/prisma/primsa";
 
-const prisma = new PrismaClient();
 
 interface User {
   id: string;
@@ -9,7 +8,12 @@ interface User {
   email: string;
   profile: string;
 }
-
+try {
+  await prisma.$connect();
+  console.log("✅ Prisma successfully connected to MongoDB!");
+} catch (error) {
+  console.error("❌ Failed to connect to MongoDB:", error);
+} 
 export async function GET(req: NextRequest) {
   try {
     const user: User = JSON.parse(req.headers.get("X-User-Id") || "{}");

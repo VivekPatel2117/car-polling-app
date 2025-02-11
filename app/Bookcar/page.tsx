@@ -7,6 +7,7 @@ import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import CarGridSkeleton from '@/components/CarLoader/CarGridSkeleton';
 import { useToast } from "@/hooks/use-toast";
+import Link from 'next/link';
 interface Car {
   id: string;  
   model: string;
@@ -15,8 +16,9 @@ interface Car {
   price: number;
   image: string;
   location: string;
-  createdAt: string; // ISO date string
-  createdBy?: string; // Optional, in case some cars don't have a creator
+  createdAt: string; 
+  createdBy?: string; 
+  bookedUserIds: string[];
 }
 
 export default function () {
@@ -24,7 +26,7 @@ export default function () {
   const [data, setData] = useState<Car[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const token = localStorage.getItem("token");
-  useEffect(() => {
+  const handleGETCarData = () =>{
     axios.get('/api/car/view',{
       headers: {
         'Authorization': `Bearer ${token}`, // Add token to Authorization header
@@ -45,6 +47,9 @@ export default function () {
         ),
       })
     })
+  }
+  useEffect(() => {
+    handleGETCarData();
   }, [])
   
   return (
@@ -69,7 +74,16 @@ export default function () {
                 <Separator/>
                   <h1 className='font-sans font-bold'>{car.location}</h1>
                   <div>
-                    <Button className='p-4 w-full rounded-sm font-sans'>Request car</Button>
+                    {car.bookedUserIds.length > 0 ? (
+                      <React.Fragment>
+                        <Button className='p-4 w-full rounded-sm font-sans' disabled>Booked</Button>
+                      </React.Fragment>
+                    ):(
+                      <Button className='p-4 w-full rounded-sm font-sans'>
+                        <Link href={`/Bookcar/${car.id}/`}>Request car</Link>
+                      </Button>
+                      // <BookingDialog carId={car.id} onSuccess={handleGETCarData}/>
+                    )}
                   </div>
               </div>
              

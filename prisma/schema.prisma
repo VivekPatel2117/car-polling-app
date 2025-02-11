@@ -19,15 +19,16 @@ model User {
 }
 
 model Car {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  model     String
-  type      String
-  company   String
-  price     Int
-  image     String
-  location  String
-  createdAt DateTime  @default(now())
-  createdBy String    @db.ObjectId
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  model          String
+  type           String
+  company        String
+  price          Int
+  image          String
+  location       String
+  createdAt      DateTime  @default(now())
+  createdBy      String    @db.ObjectId
+  bookedUserIds  String[]  @db.ObjectId @default([])
   user      User      @relation(fields: [createdBy], references: [id], name: "UserCars")
   bookings  Booking[] @relation("CarBookings")
 }
