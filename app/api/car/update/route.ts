@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function POST(req: NextRequest) {
+export async function PUT(req: NextRequest) {
   try {
     const user: User = JSON.parse(req.headers.get("X-User-Id") || "{}");
     if (!user || !user.id) {
