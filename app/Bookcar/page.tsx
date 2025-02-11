@@ -17,7 +17,7 @@ interface Car {
 
 export default function () {
   const [data, setData] = useState<Car[]>([]);
-  const token = localStorage.getItem("token")
+  const token = localStorage.getItem("token");
   useEffect(() => {
     axios.get('/api/car/view',{
       headers: {
@@ -35,7 +35,7 @@ export default function () {
     <Navbar/>
         <div className='grid mt-6 mb-6 grid-cols-3 gap-4 grid-flow-row w-[80vw] place-content-center justify-self-center justify-center'>
         {data.map((car) => (
-          <div key={car._id} className='h-[50vh] w-full border border-gray-800'>
+          <div key={car.id} className='h-[50vh] w-full border border-gray-800'>
             <img src={car.image} alt={car.model} className='h-[30vh] w-full' />
             <div className='grid'>
               <div className='grid grid-flow-row text-center'>
