@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
       await prisma.$connect();
       console.log("✅ Prisma successfully connected to MongoDB!");
     } catch (error) {
-      console.error("❌ Failed to connect to MongoDB:", error);
+      console.log("❌ Failed to connect to MongoDB:", error);
     } 
     // Get user ID from headers
     const user: user = JSON.parse(req.headers.get("X-User-Id") || "{}");
