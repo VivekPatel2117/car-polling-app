@@ -13,7 +13,7 @@ try {
   console.log("❌ Failed to connect to MongoDB:", error);
 } 
 export async function GET(req: Request, { params }: { params: { id: string } }) {
-  const { id } = params;
+  const { id } = await params;
   try{
         const user: user = JSON.parse(req.headers.get("X-User-Id") || "{}");
              if (!user) {
@@ -23,8 +23,9 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
             const carsDisplay = await prisma.car.findUnique({
                 where: { id },
             });
-        
-            return NextResponse.json({ success: true, data: carsDisplay });
+            const bookedUserIds = carsDisplay?.bookedUserIds || [];
+            const isUserBooked = bookedUserIds.includes(user.id);
+            return NextResponse.json({ success: true, data: carsDisplay,isAlreadyBookedByUser: isUserBooked});
   } catch (error) {
     return NextResponse.json({ success: false, error: error }, { status: 500 });
   }

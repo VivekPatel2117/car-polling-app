@@ -26,6 +26,7 @@ export default function () {
   const [data, setData] = useState<Car[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const token = localStorage.getItem("token");
+  const [userId, setUserId] = useState("")
   const handleGETCarData = () =>{
     axios.get('/api/car/view',{
       headers: {
@@ -33,7 +34,9 @@ export default function () {
         'Content-Type': 'application/json', // Optional, if you want to specify content type
       },
     }).then((res) => {
-      setData((res.data as { data: any[] }).data);
+      const carData = res.data as { data: [Car], user_id: string };
+      setData(carData.data);
+      setUserId(carData.user_id)
       setIsLoading(false);
     })
     .catch((err)=>{
@@ -51,7 +54,12 @@ export default function () {
   useEffect(() => {
     handleGETCarData();
   }, [])
-  
+  const handleIsBooked = (id:string,arr:String[]) => {
+    if(arr.includes(id)){
+      return true
+    }
+    return false
+  }
   return (
     <>
     <Navbar/>
@@ -74,15 +82,22 @@ export default function () {
                 <Separator/>
                   <h1 className='font-sans font-bold'>{car.location}</h1>
                   <div>
-                    {car.bookedUserIds.length > 0 ? (
+                    {car.bookedUserIds && car.bookedUserIds.length > 0 ? (
                       <React.Fragment>
-                        <Button className='p-4 w-full rounded-sm font-sans' disabled>Booked</Button>
+                        {handleIsBooked(userId,car.bookedUserIds) ? (
+                          <React.Fragment>
+                            <Button className='p-4 w-full rounded-sm font-sans' disabled>Booked</Button>
+                          </React.Fragment>
+                        ):(
+                          <Button className='p-4 w-full rounded-sm font-sans'>
+                          <Link href={`/Bookcar/${car.id}/`}>Request car</Link>
+                          </Button>
+                        )}
                       </React.Fragment>
                     ):(
                       <Button className='p-4 w-full rounded-sm font-sans'>
                         <Link href={`/Bookcar/${car.id}/`}>Request car</Link>
                       </Button>
-                      // <BookingDialog carId={car.id} onSuccess={handleGETCarData}/>
                     )}
                   </div>
               </div>

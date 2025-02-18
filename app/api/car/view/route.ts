@@ -27,7 +27,7 @@ export async function GET(req:NextRequest) {
       },
     });
 
-    return NextResponse.json({ success: true, data: carsDisplay });
+    return NextResponse.json({ success: true, data: carsDisplay, user_id: user.id });
   } catch (error) {
     return NextResponse.json({ success: false, error: error }, { status: 500 });
   }

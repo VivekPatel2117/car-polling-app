@@ -30,11 +30,11 @@ export default function page() {
   const [data, setData] = useState<Car>();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
-  const token = localStorage.getItem("token");
+  const [token, setToken] = useState("");
   const [progress, setProgress] = useState(false);
   const [days, setDays] = useState(0);
   const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
-  const handleGETCarData = () => {
+  const handleGETCarData = (token: string) => {
     axios
       .get(`/api/car/view/${id}`, {
         headers: {
@@ -43,8 +43,9 @@ export default function page() {
         },
       })
       .then((res) => {
-        const carData = res.data as { data: Car };
+        const carData = res.data as { data: Car, isAlreadyBookedByUser: boolean };
         setData(carData.data);
+        setIsBooked(carData.isAlreadyBookedByUser)
         setIsLoading(false);
       })
       .catch((err) => {
@@ -59,10 +60,11 @@ export default function page() {
         });
       });
   };
+  const [isBooked, setIsBooked] = useState(false);
   const handleBooking = async () => {
     setProgress(true);
     try {
-        alert(`${dateRange?.from}- ${dateRange?.to}`);
+      alert(`${dateRange?.from}- ${dateRange?.to}`);
       if (dateRange?.from === undefined || dateRange?.to === undefined) {
         toast({
           variant: "destructive",
@@ -74,7 +76,6 @@ export default function page() {
         });
         return;
       }
-      const token = localStorage.getItem("token");
       const response = await axios.post(
         `/api/car/book/create`,
         {
@@ -84,14 +85,17 @@ export default function page() {
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         }
       );
 
-      if (response.status === 200) {
-        handleGETCarData(); // Notify parent component of the booking success
+      if (response.status === 201) {
+        toast({
+          description:"Booking successfull!"
+        })
+        handleGETCarData(token); // Notify parent component of the booking success
       }
     } catch (err) {
       setError("Failed to book. Please try again.");
@@ -99,9 +103,6 @@ export default function page() {
       setProgress(false);
     }
   };
-  useEffect(() => {
-    handleGETCarData();
-  }, []);
   const getDaysDifference = () => {
     if (dateRange?.from && dateRange?.to) {
       const differenceInDates = differenceInDays(dateRange.to, dateRange.from);
@@ -119,7 +120,13 @@ export default function page() {
      })
     }
   }, [dateRange])
-  
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedToken = localStorage.getItem("token");
+      setToken(storedToken as string);
+      handleGETCarData(storedToken as string);
+    }
+  }, []);
   return (
     <React.Fragment>
       <Navbar />
@@ -177,14 +184,12 @@ export default function page() {
                         onClick={handleBooking}
                         className="w-full h-[10vh] text-3xl"
                       >
-                        {data.bookedUserIds.length > 0 ? (
-                                <Button className="text-2xl w-full rounded-sm font-sans" disabled>
-                                Booked
-                                </Button>
+                        {isBooked ? (
+                                "Requested"
                             ) : (
-                            <Button className="text-2xl w-full rounded-sm font-sans">
+                              <>
                                 {progress ? <Spinner isOpen={progress}/> : "Request car"}
-                            </Button>
+                              </>
                         )}
                       </Button>
                     </div>

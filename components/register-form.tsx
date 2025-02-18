@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
+import Spinner from "./Spinner";
 import {
   Card,
   CardContent,
@@ -21,11 +22,13 @@ import GoogleDark from "../public/Google-dark.svg";
 import { useToast } from "@/hooks/use-toast";
 
 type RegisterFormProps = React.ComponentPropsWithoutRef<"div"> & {
-  onFormSubmit: (formData: { email: string; password: string, file: any, username: string }) => void;
+  onFormSubmit: (formData: { email: string; password: string, file: any, username: string }) => void,
+  isLoading: boolean,
 };
 export function RegisterForm({
   className,
   onFormSubmit,
+  isLoading,
   ...props
 }: RegisterFormProps) {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -153,7 +156,9 @@ export function RegisterForm({
                   />
                 </div>
                 <Button type="submit" className="w-full">
-                  Create account
+                {isLoading ? (
+                  <Spinner isOpen={isLoading} />
+               ): "Create Account"}
                 </Button>
               </div>
               <div className="mt-4 text-center text-sm">

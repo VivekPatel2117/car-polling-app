@@ -29,8 +29,8 @@ model Car {
   createdAt      DateTime  @default(now())
   createdBy      String    @db.ObjectId
   bookedUserIds  String[]  @db.ObjectId @default([])
-  user      User      @relation(fields: [createdBy], references: [id], name: "UserCars")
-  bookings  Booking[] @relation("CarBookings")
+  user      User           @relation(fields: [createdBy], references: [id], name: "UserCars")
+  bookings  Booking[]      @relation("CarBookings")
 }
 
 model Booking {
@@ -40,7 +40,7 @@ model Booking {
   accepted   Boolean  @default(false)
   car_id     String   @db.ObjectId
   user_id    String   @db.ObjectId
-
+  status     String   @default("pending")
   car        Car      @relation(fields: [car_id], references: [id], name: "CarBookings")
   user       User     @relation(fields: [user_id], references: [id], name: "UserBookings")
 }
