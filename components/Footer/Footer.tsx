@@ -1,5 +1,5 @@
 import { Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
-
+import Link from "next/link";
 const Footer = () => {
   return (
     <footer className="border py-8">
@@ -17,24 +17,24 @@ const Footer = () => {
           <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
           <ul className="space-y-2">
             <li>
-              <a href="/about" className="text-sm hover:underline">
+              <Link href="/about-us" className="text-sm hover:underline">
                 About Us
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/contact" className="text-sm hover:underline">
+              <Link href="/contact-us" className="text-sm hover:underline">
                 Contact Us
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/privacy" className="text-sm hover:underline">
+              <Link href="/privacy" className="text-sm hover:underline">
                 Privacy Policy
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/terms" className="text-sm hover:underline">
+              <Link href="/terms-and-condition" className="text-sm hover:underline">
                 Terms & Conditions
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
@@ -43,38 +43,38 @@ const Footer = () => {
         <div>
           <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
           <div className="flex space-x-4">
-            <a
+            <Link
               href="https://facebook.com"
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 bg-gray-800 rounded-full hover:bg-gray-700"
             >
               <Facebook size={20} />
-            </a>
-            <a
+            </Link>
+            <Link
               href="https://twitter.com"
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 bg-gray-800 rounded-full hover:bg-gray-700"
             >
               <Twitter size={20} />
-            </a>
-            <a
+            </Link>
+            <Link
               href="https://instagram.com"
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 bg-gray-800 rounded-full hover:bg-gray-700"
             >
               <Instagram size={20} />
-            </a>
-            <a
+            </Link>
+            <Link
               href="https://linkedin.com"
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 bg-gray-800 rounded-full hover:bg-gray-700"
             >
               <Linkedin size={20} />
-            </a>
+            </Link>
           </div>
         </div>
       </div>
