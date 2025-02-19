@@ -1,3 +1,5 @@
+import Footer from "@/components/Footer/Footer"
+
 export const metadata = {
   title: "Privacy Policy",
   description: "Understand how we handle your data.",
@@ -5,7 +7,7 @@ export const metadata = {
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="container py-6">
+    <div className="container py-6 h-screen w-screen grid justify-center items-center">
       <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
         Privacy Policy
       </h1>
@@ -24,6 +26,7 @@ export default function PrivacyPolicyPage() {
         Update this text to reflect your specific policies. 
         Ensure compliance with relevant laws (e.g., GDPR, CCPA).
       </p>
+      <Footer/>
     </div>
   )
 }

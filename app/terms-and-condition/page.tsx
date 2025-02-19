@@ -1,3 +1,5 @@
+import Footer from "@/components/Footer/Footer"
+
 export const metadata = {
   title: "Terms & Conditions",
   description: "Review the terms for using our service.",
@@ -5,7 +7,7 @@ export const metadata = {
 
 export default function TermsAndConditionsPage() {
   return (
-    <div className="container py-6">
+    <div className="container py-6 grid h-screen w-screen items-center justify-center">
       <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
         Terms &amp; Conditions
       </h1>
@@ -24,6 +26,7 @@ export default function TermsAndConditionsPage() {
       <p className="leading-7 [&:not(:first-child)]:mt-6">
         Customize these points to suit your platform and legal requirements.
       </p>
+      <Footer/>
     </div>
   )
 }

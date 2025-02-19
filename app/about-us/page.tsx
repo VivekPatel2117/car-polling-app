@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer/Footer"
 
 export const metadata = {
   title: "About Us",
@@ -6,7 +7,7 @@ export const metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="container py-6">
+    <div className="container py-6 h-screen w-screen justify-center items-center grid">
       <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
         About Us
       </h1>
@@ -14,6 +15,7 @@ export default function AboutPage() {
         Welcome to our About Us page! Here you can share your company's story,
         mission, and values. Let visitors learn what makes your organization special.
       </p>
+      <Footer/>
     </div>
   )
 }
