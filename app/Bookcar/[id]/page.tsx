@@ -2,6 +2,7 @@
 import Footer from "@/components/Footer/Footer";
 import { Navbar } from "@/components/Navbar/Navbar";
 import { useToast } from "@/hooks/use-toast";
+import { addDays } from "date-fns";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
@@ -33,7 +34,10 @@ export default function page() {
   const [token, setToken] = useState("");
   const [progress, setProgress] = useState(false);
   const [days, setDays] = useState(0);
-  const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
+    from: new Date(2022, 0, 20),
+    to: addDays(new Date(2022, 0, 20), 20),
+  });
   const handleGETCarData = (token: string) => {
     axios
       .get(`/api/car/view/${id}`, {
@@ -43,9 +47,12 @@ export default function page() {
         },
       })
       .then((res) => {
-        const carData = res.data as { data: Car, isAlreadyBookedByUser: boolean };
+        const carData = res.data as {
+          data: Car;
+          isAlreadyBookedByUser: boolean;
+        };
         setData(carData.data);
-        setIsBooked(carData.isAlreadyBookedByUser)
+        setIsBooked(carData.isAlreadyBookedByUser);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -85,7 +92,7 @@ export default function page() {
         },
         {
           headers: {
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         }
@@ -93,8 +100,8 @@ export default function page() {
 
       if (response.status === 201) {
         toast({
-          description:"Booking successfull!"
-        })
+          description: "Booking successfull!",
+        });
         handleGETCarData(token); // Notify parent component of the booking success
       }
     } catch (err) {
@@ -112,14 +119,12 @@ export default function page() {
     return 0; // Default value if range is not selected
   };
   useEffect(() => {
-    if(dateRange?.from && dateRange?.to) {
-     toast({
-      description: (
-        <p>{getDaysDifference()}</p>
-      )
-     })
+    if (dateRange?.from && dateRange?.to) {
+      toast({
+        description: <p>{getDaysDifference()}</p>,
+      });
     }
-  }, [dateRange])
+  }, [dateRange]);
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedToken = localStorage.getItem("token");
@@ -141,55 +146,63 @@ export default function page() {
                 <p className="font-sans items-center text-xl">
                   Pickup location: <b>{data?.location}</b>
                 </p>
-                <p className="flex text-xl font-sans items-center gap-4">
-                  Choose your pickup date: <DatePicker date={dateRange} setDate={setDateRange} />
-                </p>
+                <div className="flex gap-2 items-center">
+                <p>Pick a date: </p>
+                <DatePicker date={dateRange} setDate={setDateRange}/>
+                </div>
               </div>
               <div className="grid grid-cols-2 h-[70vh]">
                 <div className="grid justify-center items-center">
-                  <img src={data.image} alt={data.company} />
+                  <img className="w-[40vw]" src={data.image} alt={data.company} />
                 </div>
                 <div className="grid justify-start items-center w-full">
                   <div className="grid grid-flow-row p-2 gap-1">
                     <div className="w-full flex flex-col gap-[10vh]">
                       <div className="grid grid-rows-3 items-center h-[25vh]">
-                        <h1 className="font-sans font-bold text-5xl">
+                        <h1 className="font-sans font-bold text-3xl">
                           Company name: {data.company}
                         </h1>
-                        <h4 className="font-sans text-3xl">
+                        <h4 className="font-sans text-2xl">
                           Model: {data.model}
                         </h4>
-                        <h1 className="font-sans text-3xl">
+                        <h1 className="font-sans text-2xl">
                           Car Type: {data.type}
                         </h1>
                       </div>
                       <div className="flex flex-col gap-4">
-                        <h1 className="flex gap-4 font-sans text-2xl">
+                        <h1 className="flex gap-4 font-sans text-xl">
                           Price:{" "}
-                          <p className="font- font-bold text-2xl hover:underline">
+                          <p className="font- font-bold text-xl hover:underline">
                             ₹{data.price} / per day
                           </p>
                         </h1>
                         {dateRange?.from && dateRange?.to && (
                           <h1 className="flex gap-4 font-sans text-2xl">
-                          Total Price:{" "}
-                          <p className="flex flex-col font-bold text-2xl hover:underline">
-                            ₹{(data.price * days)} for {days} days
-                            <b className="text-gray-600 font-normal text-sm">This price does not include fuel and toll tax</b>
-                          </p>
-                        </h1>
+                            Total Price:{" "}
+                            <p className="flex flex-col font-bold text-2xl hover:underline">
+                              ₹{data.price * days} for {days} days
+                              <b className="text-gray-600 font-normal text-sm">
+                                This price does not include fuel and toll tax
+                              </b>
+                            </p>
+                          </h1>
                         )}
                       </div>
                       <Button
                         onClick={handleBooking}
-                        className="w-full h-[10vh] text-3xl"
+                        className="w-full h-[7vh] text-2xl"
+                        disabled={isBooked}
                       >
                         {isBooked ? (
-                                "Requested"
+                          "Requested"
+                        ) : (
+                          <>
+                            {progress ? (
+                              <Spinner isOpen={progress} />
                             ) : (
-                              <>
-                                {progress ? <Spinner isOpen={progress}/> : "Request car"}
-                              </>
+                              "Request car"
+                            )}
+                          </>
                         )}
                       </Button>
                     </div>

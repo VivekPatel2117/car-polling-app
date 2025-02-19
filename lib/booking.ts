@@ -1,5 +1,30 @@
 import { sendMail } from "./mailer";
 
+function formatDateWithOrdinal(dateString: string) {
+    const date = new Date(dateString);
+    const day = date.getDate();
+  
+    const getOrdinalSuffix = (day: any) => {
+      if (day > 3 && day < 21) return "th";
+      switch (day % 10) {
+        case 1:
+          return "st";
+        case 2:
+          return "nd";
+        case 3:
+          return "rd";
+        default:
+          return "th";
+      }
+    };
+  
+    const dayWithSuffix = day + getOrdinalSuffix(day);
+    const month = date.toLocaleString("default", { month: "long" });
+    const year = date.getFullYear();
+  
+    return `${dayWithSuffix} ${month} ${year}`;
+  }
+  
 export const bookingRequest = async (
     email: string,
     username: string,
@@ -19,8 +44,40 @@ export const bookingRequest = async (
             <p>We've received your booking request for <strong>${car_name} (${car_model})</strong>.</p>
             <p><strong>Booking Details:</strong></p>
             <ul>
-                <li><strong>Start Date:</strong> ${start_date}</li>
-                <li><strong>End Date:</strong> ${end_date}</li>
+                <li><strong>Start Date:</strong> ${formatDateWithOrdinal(start_date)}</li>
+                <li><strong>End Date:</strong> ${formatDateWithOrdinal(end_date)}</li>
+                <li><strong>Total Days:</strong> ${days}</li>
+                <li><strong>Price per Day:</strong> ₹${price}</li>
+                <li><strong>Total Bill:</strong> ₹${total_bill}</li>
+            </ul>
+            <p>Please take action by visiting Poolcar - Your orders</p>
+            <p>Thank you for choosing Poolcar! 🚘</p>
+        </div>
+    `;
+
+    await sendMail(email, body, subject);
+};
+export const bookingRequested = async (
+    email: string,
+    username: string,
+    start_date: string,
+    end_date: string,
+    car_name: string,
+    car_model: string,
+    days: number,
+    price: number,
+    total_bill: number
+) => {
+    const subject = `Booking Requested - ${car_name} (${car_model})`;
+    const body = `
+        <div style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+            <h2 style="color: #007bff; text-align: center;">Booking Request Received 🚗</h2>
+            <p>Hi <strong>${username}</strong>,</p>
+            <p>We've received your booking request for <strong>${car_name} (${car_model})</strong>.</p>
+            <p><strong>Booking Details:</strong></p>
+            <ul>
+                <li><strong>Start Date:</strong> ${formatDateWithOrdinal(start_date)}</li>
+                <li><strong>End Date:</strong> ${formatDateWithOrdinal(end_date)}</li>
                 <li><strong>Total Days:</strong> ${days}</li>
                 <li><strong>Price per Day:</strong> ₹${price}</li>
                 <li><strong>Total Bill:</strong> ₹${total_bill}</li>
@@ -52,8 +109,8 @@ export const bookingAccepted = async (
             <p>Your booking for <strong>${car_name} (${car_model})</strong> has been confirmed! 🎉</p>
             <p><strong>Booking Details:</strong></p>
             <ul>
-                <li><strong>Start Date:</strong> ${start_date}</li>
-                <li><strong>End Date:</strong> ${end_date}</li>
+                <li><strong>Start Date:</strong> ${formatDateWithOrdinal(start_date)}</li>
+                <li><strong>End Date:</strong> ${formatDateWithOrdinal(end_date)}</li>
                 <li><strong>Total Days:</strong> ${days}</li>
                 <li><strong>Price per Day:</strong> ₹${price}</li>
                 <li><strong>Total Bill:</strong> ₹${total_bill}</li>
@@ -86,8 +143,8 @@ export const bookingRejected = async (
             <p>Unfortunately, your booking request for <strong>${car_name} (${car_model})</strong> has been rejected.</p>
             <p><strong>Booking Details:</strong></p>
             <ul>
-                <li><strong>Start Date:</strong> ${start_date}</li>
-                <li><strong>End Date:</strong> ${end_date}</li>
+                <li><strong>Start Date:</strong> ${formatDateWithOrdinal(start_date)}</li>
+                <li><strong>End Date:</strong> ${formatDateWithOrdinal(end_date)}</li>
                 <li><strong>Total Days:</strong> ${days}</li>
                 <li><strong>Price per Day:</strong> ₹${price}</li>
                 <li><strong>Total Bill:</strong> ₹${total_bill}</li>

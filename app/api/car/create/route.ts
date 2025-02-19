@@ -4,7 +4,7 @@ import { prisma } from "@/prisma/primsa";
 interface user {
   id: string;
   username: string;
-  emial: string;
+  email: string;
   profile: string;
 }
 export async function POST(req: NextRequest) {
@@ -17,7 +17,6 @@ export async function POST(req: NextRequest) {
     } 
     // Get user ID from headers
     const user: user = JSON.parse(req.headers.get("X-User-Id") || "{}");
-    console.log("USER:", user);
     
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -32,7 +31,6 @@ export async function POST(req: NextRequest) {
     }
 
     const { model, type, company, price, image, location } = body;
-    console.log("BODY:", body);
     // Validate required fields
     if (!model || !type || !company || !price || !image || !location) {
       return NextResponse.json({ error: "All fields are required" }, { status: 400 });

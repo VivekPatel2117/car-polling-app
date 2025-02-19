@@ -15,7 +15,6 @@ export async function POST(request: NextRequest) {
     if (!email || !password || !username || !profile) {
       return new Response('Email, password, username, and profile are required', { status: 400 });
     }
-    console.log("PROFILE",profile)
     // Check if user already exists by email
     const existingUser = await prisma.user.findUnique({
       where: {

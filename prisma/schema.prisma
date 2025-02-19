@@ -44,3 +44,12 @@ model Booking {
   car        Car      @relation(fields: [car_id], references: [id], name: "CarBookings")
   user       User     @relation(fields: [user_id], references: [id], name: "UserBookings")
 }
+
+model Otp {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  otp       String
+  createdAt DateTime @default(now()) @map("createdAt")
+
+  @@index([createdAt], map: "createdAtTTL")
+}

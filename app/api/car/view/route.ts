@@ -3,7 +3,7 @@ import { prisma } from "@/prisma/primsa";
 interface user {
   id: string;
   username: string;
-  emial: string;
+  email: string;
   profile: string;
 }
 try {

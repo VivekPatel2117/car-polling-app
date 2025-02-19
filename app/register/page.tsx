@@ -32,6 +32,11 @@ export default function Page() {
               description: `User registered successfully!`,
             });
             router.push("/login");
+          }else if(response.status === 409){
+            toast({
+              variant:"destructive",
+              description:"Email already in use by other user"
+            })
           }
         });
     }).catch((err)=>{

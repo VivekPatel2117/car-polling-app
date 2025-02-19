@@ -91,31 +91,30 @@ export default function Page() {
   const [bookings, setBookings] = useState<BookingData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState("");
-  useEffect(() => {
-    const fetchUserBookings = async () => {
-      try {
-        const token = localStorage.getItem("token")
-        const response = await axios.get("/api/car/book/order", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
+  const fetchUserBookings = async () => {
+    try {
+      const token = localStorage.getItem("token")
+      const response = await axios.get("/api/car/book/manage", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
 
-        if (response.status === 201) {
-          const data = (response.data as { bookings: Booking[] }).bookings;
-          setBookings(processData(data));
-          setIsLoading(false);
-        } else if(response.status === 200) {
-          setIsError("No bookings found");
-        }
-      } catch (error) {
-        setIsError("Internal Error occured!")
-      } finally {
-       setIsLoading(false);
+      if (response.status === 201) {
+        const data = (response.data as { bookings: Booking[] }).bookings;
+        setBookings(processData(data));
+        setIsLoading(false);
+      } else if(response.status === 200) {
+        setIsError("No bookings found");
       }
-    };
-
+    } catch (error) {
+      setIsError("Internal Error occured!")
+    } finally {
+     setIsLoading(false);
+    }
+  };
+  useEffect(() => {
     fetchUserBookings();
   }, []); // Empty array to run once when the component mounts
 
@@ -123,6 +122,7 @@ export default function Page() {
     <>
       <Navbar />
       <div className="container mx-auto py-10">
+          <h1 className="font-sans">Manage orders you have got</h1>
        {isLoading ? (
         <TableSkeleton/>
        ):isError !== "" ? (

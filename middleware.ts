@@ -3,7 +3,7 @@ import { isAuthenticated } from "@/lib/isAuthenticated";
 
 // Apply middleware to API routes
 export const config = {
-  matcher: ["/api/car/:path*","/api/car/book/create"],
+  matcher: ["/api/car/:path*","/api/car/book/create","/api/user"],
 };
 
 export async function middleware(req:NextRequest) {

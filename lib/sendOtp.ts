@@ -1,15 +1,28 @@
 import { sendMail } from "./mailer";
-import NodeCache from "node-cache";
-// Function to generate OTP
+import { prisma } from "@/prisma/primsa";
 const generateOtp = (): string => {
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
   return otp;
 };
 
-const otpCache = new NodeCache({ stdTTL: 1800, checkperiod: 120 }); 
+try {
+  await prisma.$connect();
+  console.log("✅ Prisma successfully connected to MongoDB!");
+} catch (error) {
+  console.log("❌ Failed to connect to MongoDB:", error);
+}
+
+const storeOtp = async (email: string, otp: string) => {
+  return await prisma.otp.upsert({
+    where: { email },
+    update: { otp, createdAt: new Date() },
+    create: { email, otp, createdAt: new Date() },
+  });
+};
 // Example usage in an authentication route
 const sendOtpForAuthentication = async (recipientEmail: string) => {
     const otp = generateOtp();
+    await storeOtp(recipientEmail,otp)
     const body = `<!DOCTYPE html>
     <html lang="en">
     <head>
@@ -93,6 +106,7 @@ const sendOtpForAuthentication = async (recipientEmail: string) => {
           <p>Hi User,</p>
           <p>We received a request to verify your email address. Please use the OTP below to complete the verification process:</p>
           <div class="otp-code">${otp}</div>
+          <p>This OTP is only valid for next 30 minutes</p> <br>
           <p>If you did not request this, please ignore this email or contact support.</p>
         </div>
         <div class="email-footer">
@@ -104,27 +118,24 @@ const sendOtpForAuthentication = async (recipientEmail: string) => {
     </html>
     `;
   const response = await sendMail(recipientEmail,body, "OTP Authentication");
-  otpCache.set("OTP", otp); // Store OTP in cache
-  otpCache.set("EMAIL", recipientEmail); // Store email in cache
-  console.log("OTP sent to", recipientEmail);
-  console.log("Response",response)
+  
   return response
 };
 
-const validateOtp = (otpInput: string): boolean => {
-  const storedOtp = otpCache.get("OTP");
-  if (storedOtp === otpInput) {
-    console.log("OTP validated successfully!");
-    return true;
-  } else {
-    console.log("Invalid OTP!");
-    return false;
+const validateOtp = async (otp: string) =>{
+  try {
+    const existingOtp = await prisma.otp.findFirst({
+      where: { otp }, // Search by OTP
+    });
+    
+    if (!existingOtp) {
+      return { success: false, message: "OTP not found or expired" };
+    }
+    
+    return { success: true, email: existingOtp.email, createdAt: existingOtp.createdAt };
+    
+  } catch (error) {
+    console.log("ERROR",error)
   }
-};
-const getOtp = () => {
-  return otpCache.get("OTP");
 }
-const getEmail = () => {  
-  return otpCache.get("EMAIL");
-}
-export default { sendOtpForAuthentication, validateOtp, getOtp, getEmail };
+export default { sendOtpForAuthentication, validateOtp };

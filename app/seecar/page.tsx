@@ -5,7 +5,6 @@ import React, { useState, useEffect } from 'react'
 import { useToast } from "@/hooks/use-toast";
 import axios from 'axios'
 import { Separator } from '@/components/ui/separator';
-import { Button } from '@/components/ui/button';
 import CarGridSkeleton from '@/components/CarLoader/CarGridSkeleton';
 import { PriceUpdate } from '@/components/Alert/PriceUpdate';
 interface Car {

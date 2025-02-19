@@ -1,8 +1,9 @@
 import nodemailer from "nodemailer";
 
 // Create a transporter object using SMTP transport
+console.log("CRED",process.env.EMAIL,process.env.EMAIL_PASSWORD)
 const transporter = nodemailer.createTransport({
-  service: "gmail", // or any other email service
+  service: "gmail",
   auth: {
     user: process.env.EMAIL,
     pass: process.env.EMAIL_PASSWORD,

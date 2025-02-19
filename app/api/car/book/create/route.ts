@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import { prisma } from "@/prisma/primsa";
-import { bookingRequest } from "@/lib/booking";
+import { bookingRequest, bookingRequested } from "@/lib/booking";
 
 interface User {
   id: string;
@@ -22,7 +22,6 @@ export async function POST(req: NextRequest) {
     if (!user) {
            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    console.log("USER:",user)
     const { start_date, end_date, car_id } = await req.json();
     if (!start_date || !end_date || !car_id) {
       return NextResponse.json(
@@ -61,13 +60,13 @@ export async function POST(req: NextRequest) {
 
     // Send email to the requester and car owner
     await Promise.all([
-      bookingRequest(
-        user.email,        // Requester's email
-        user.username,     // Requester's name
+      bookingRequested(
+        user.email,        
+        user.username,     
         start_date,
         end_date,
-        car.company,       // Car name (Company)
-        car.model,         // Car model
+        car.company,       
+        car.model,         
         Math.ceil((new Date(end_date).getTime() - new Date(start_date).getTime()) / (1000 * 60 * 60 * 24)), // Total days
         car.price,         // Price per day
         car.price * Math.ceil((new Date(end_date).getTime() - new Date(start_date).getTime()) / (1000 * 60 * 60 * 24)) // Total bill

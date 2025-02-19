@@ -95,7 +95,7 @@ export default function Page() {
     const fetchUserBookings = async () => {
       try {
         const token = localStorage.getItem("token")
-        const response = await axios.get("/api/car/book/manage", {
+        const response = await axios.get("/api/car/book/order", {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -124,6 +124,7 @@ export default function Page() {
     <>
       <Navbar />
       <div className="container mx-auto py-10">
+        <h1>Orders you have requested</h1>
        {isLoading ? (
         <TableSkeleton/>
        ):isError !== "" ? (

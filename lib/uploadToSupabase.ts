@@ -14,7 +14,6 @@ const uploadToSupabaseStorage = async ({
 
   const bucket = process.env.NEXT_PUBLIC_SUPABASE_BUCKET as string;
   const filePath = `${type}/${Date.now()}_${file.name}`;
-  console.log(filePath,bucket)
   // Upload file to Supabase Storage
   const { data, error } = await supabase.storage.from(bucket).upload(filePath, file);
 
