@@ -100,9 +100,11 @@ export const Navbar = () => {
       }
     };
     handleResize();
-    const profileImg = localStorage.getItem("profile");
-    if(profileImg){
-      setProfile(profileImg)
+    if (typeof window !== "undefined") {
+      const profileImg = localStorage.getItem("profile");
+      if(profileImg){
+        setProfile(profileImg)
+      }
     }
     window.addEventListener("resize", handleResize);
     return () => {

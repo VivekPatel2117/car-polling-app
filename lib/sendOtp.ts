@@ -138,4 +138,5 @@ const validateOtp = async (otp: string) =>{
     console.log("ERROR",error)
   }
 }
-export default { sendOtpForAuthentication, validateOtp };
+const commonOtp = { sendOtpForAuthentication, validateOtp };
+export default commonOtp;

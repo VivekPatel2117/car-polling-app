@@ -21,11 +21,11 @@ interface Car {
   bookedUserIds: string[];
 }
 
-export default function () {
+export default function Book() {
   const { toast } = useToast();
   const [data, setData] = useState<Car[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const token = localStorage.getItem("token");
+  const [token, setToken] = useState("");
   const [userId, setUserId] = useState("")
   const handleGETCarData = () =>{
     axios.get('/api/car/view',{
@@ -53,8 +53,14 @@ export default function () {
   }
   useEffect(() => {
     handleGETCarData();
+      if (typeof window !== "undefined") {
+        const storedToken = localStorage.getItem("token");
+        if (storedToken) {
+          setToken(storedToken);
+        }
+      }
   }, [])
-  const handleIsBooked = (id:string,arr:String[]) => {
+  const handleIsBooked = (id:string,arr:string[]) => {
     if(arr.includes(id)){
       return true
     }

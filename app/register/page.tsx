@@ -44,6 +44,7 @@ export default function Page() {
         variant: "destructive",
         description: "Internal Error occured! \n Try again after sometime",
       });
+      console.log("Error occured in register: ",err)
     }).finally(()=>{
       setIsLoading(false);
     })

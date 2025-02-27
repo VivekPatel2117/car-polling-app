@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetDescription,
   SheetFooter,
@@ -89,14 +88,19 @@ export default function Slider({ open, setOpen }: SliderProps) {
 
   useEffect(() => {
     if (open) {
-      const tokenData = localStorage.getItem("token");
-      if (tokenData) {
-        handleGETUser(tokenData);
-        setToken(tokenData);
+      if (token) {
+        handleGETUser(token);
       }
     }
   }, [open]);
-
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedToken = localStorage.getItem("token");
+      if (storedToken) {
+        setToken(storedToken);
+      }
+    }
+  }, []);
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>

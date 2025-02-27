@@ -40,7 +40,9 @@ export default function page() {
         }
       })
       .catch((err) => {
-        alert("Error occured");
+        toast({
+          description:`Error occured: ${err}`
+        });
         setIsLoading(false);
         setIsOtpSent(false);
       });

@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { SignJWT } from 'jose';
 import { prisma } from "@/prisma/primsa"
 

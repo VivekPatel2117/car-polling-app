@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast"
@@ -22,7 +22,7 @@ import Spinner from "./Spinner";
 
 type LoginFormProps = React.ComponentPropsWithoutRef<"div"> & {
   onFormSubmit: (formData: { email: string; password: string }) => void;
-  isLoading: Boolean;
+  isLoading: boolean;
 };
 export function LoginForm({
   className,
@@ -30,6 +30,7 @@ export function LoginForm({
   isLoading,
   ...props 
 }: LoginFormProps ) {
+  const [theme, setTheme] = useState("");
   const { toast } = useToast()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -43,6 +44,15 @@ export function LoginForm({
     }
     onFormSubmit({ email, password }); 
   };
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedTheme = localStorage.getItem("theme");
+      if (storedTheme) {
+        setTheme(storedTheme);
+      }
+    }
+  }, [])
+  
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -86,7 +96,7 @@ export function LoginForm({
               <Button>
                 <Image
                   className="text-white"
-                  src={localStorage.getItem("theme") === "dark" ? GithubDark : Github}
+                  src={theme === "dark" ? GithubDark : Github}
                   alt="Github"
                   width={20}
                   height={20}
@@ -94,7 +104,7 @@ export function LoginForm({
                 Github
               </Button>
               <Button>
-                <Image src={localStorage.getItem("theme") === "dark" ? GoogleDark : Google} alt="Google" width={20} height={20} />
+                <Image src={theme === "dark" ? GoogleDark : Google} alt="Google" width={20} height={20} />
                 Google
               </Button>
             </div>

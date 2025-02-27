@@ -15,7 +15,7 @@ export async function middleware(req:NextRequest) {
   try {
     // Attach user data to request headers
     const requestHeaders = new Headers(req.headers);
-    requestHeaders.set("X-User-Id", (isAuth));
+    requestHeaders.set("X-User-Id", JSON.stringify(isAuth));
 
     return NextResponse.next({
       request: { headers: requestHeaders },

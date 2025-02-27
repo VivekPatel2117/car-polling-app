@@ -19,11 +19,11 @@ interface Car {
   createdBy?: string; 
 }
 
-export default function page() {
+export default function seecar() {
   const { toast } = useToast();
   const [data, setData] = useState<Car[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const token = localStorage.getItem("token")
+  const [token, setToken] = useState("");
   const handleCarData = () =>{
     setData([]);
     axios.get("/api/car/update",{
@@ -47,8 +47,15 @@ export default function page() {
   }
   useEffect(() => {
     handleCarData();
+    if (typeof window !== "undefined") {
+      const storedToken = localStorage.getItem("token");
+      if (storedToken) {
+        setToken(storedToken);
+      }
+    }
   }, []);
   
+
   return (
     <>
     <Navbar/>

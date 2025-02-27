@@ -1,8 +1,6 @@
 import * as React from "react";
 import Image from "next/image"
-import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Card, CardContent } from "@/components/ui/card";
-import Car from "@/public/car.jpg"
 import {
   Carousel,
   CarouselContent,

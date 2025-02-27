@@ -24,7 +24,7 @@ interface Car {
   createdBy?: string;
   bookedUserIds: string[];
 }
-export default function page() {
+export default function Bookcar() {
   const params = useParams();
   const { toast } = useToast();
   const id = params.id;
@@ -106,6 +106,8 @@ export default function page() {
       }
     } catch (err) {
       setError("Failed to book. Please try again.");
+      console.log("Error occured in Bookcar: ",err);
+      console.log(error);
     } finally {
       setProgress(false);
     }

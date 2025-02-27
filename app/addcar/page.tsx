@@ -3,7 +3,7 @@ import Footer from "@/components/Footer/Footer";
 import { Navbar } from "@/components/Navbar/Navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
 import {
@@ -17,13 +17,14 @@ import { Separator } from "@/components/ui/separator";
 import uploadToSupabaseStorage from "@/lib/uploadToSupabase";
 import Link from "next/link";
 
-export default function page() {
+export default function addcar() {
   const [file, setFile] = useState<any>();
   const [carImg, setCarImg] = useState<string>("");
   const [model, setModel] = useState<string>("");
   const [company, setCompany] = useState<string>("");
   const [type, setType] = useState<string>("");
   const [price, setPrice] = useState<string>("");
+  const [token, setToken] = useState<string>("");
   const [location, setLocation] = useState<string>("");
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -48,7 +49,6 @@ export default function page() {
         description: "Please fill all the feilds",
       });
     }
-    const token = localStorage.getItem("token")
     uploadToSupabaseStorage({file:file,type:"Car"}).then((res)=>{
       axios.post("/api/car/create",{
         model,type,company,price,image:res,location
@@ -83,6 +83,15 @@ export default function page() {
       })
     })
   };
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedToken = localStorage.getItem("token");
+      if (storedToken) {
+        setToken(storedToken as string);
+      }
+    }
+  }, []);
+  
   return (
     <>
       <Navbar />

@@ -12,6 +12,6 @@ export async function isAuthenticated(req: NextRequest) {
     const { payload } = await jwtVerify(token, new TextEncoder().encode(SECRET_KEY!));
     return JSON.stringify(payload);
   } catch (error) {
-    return null;
+    return error;
   }
 }

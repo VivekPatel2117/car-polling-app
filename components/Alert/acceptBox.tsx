@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -22,14 +21,13 @@ export const AcceptBox: React.FC<AcceptProps> = ({ bookingId, onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [open, setOpen] = useState(false); // Control dialog manually
-
+  const [token, setToken] = useState("");
   const handleAcceptBooking = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
     try {
-      const token = localStorage.getItem("token");
       const response = await axios.post(
         `/api/car/book/accept`,
         {
@@ -49,11 +47,19 @@ export const AcceptBox: React.FC<AcceptProps> = ({ bookingId, onSuccess }) => {
       }
     } catch (err) {
       setError("Failed to accept booking. Please try again.");
+      console.log("Error occured in acceptBox: ",err);
     } finally {
       setLoading(false);
     }
   };
-
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedToken = localStorage.getItem("token");
+      if (storedToken) {
+        setToken(storedToken);
+      }
+    }
+  }, []);
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <Button variant={"outline"} className="w-full" onClick={() => setOpen(true)}>Accept</Button>

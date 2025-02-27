@@ -71,7 +71,7 @@ function getTotalPrice(price: number, from: string, to: string) {
 }
 
 const processData = (data: Booking[]) => {
-  return data.map((item, index) => {
+  return data.map((item) => {
     const newItem = {
       id: item.id,
       start_date: formatDateWithOrdinal(item.start_date),
@@ -91,10 +91,10 @@ export default function Page() {
   const [bookings, setBookings] = useState<BookingData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState("");
+  const [token, setToken] = useState("");
   useEffect(() => {
     const fetchUserBookings = async () => {
       try {
-        const token = localStorage.getItem("token")
         const response = await axios.get("/api/car/book/order", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -118,6 +118,12 @@ export default function Page() {
     };
 
     fetchUserBookings();
+    if (typeof window !== "undefined") {
+      const storedToken = localStorage.getItem("token");
+      if (storedToken) {
+        setToken(storedToken);
+      }
+    }
   }, []); // Empty array to run once when the component mounts
 
   return (

@@ -1,5 +1,5 @@
 "use client";
-import { useState,useRef } from "react";
+import { useState,useRef,useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -62,6 +62,15 @@ export function RegisterForm({
   const handleAvatarClick = () => {
     fileInputRef.current?.click(); // Open file input when clicking on avatar
   };
+  const [theme, setTheme] = useState("");
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedTheme = localStorage.getItem("theme");
+      if (storedTheme) {
+        setTheme(storedTheme);
+      }
+    }
+  }, []);
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -78,7 +87,7 @@ export function RegisterForm({
                 <Image
                   className="text-white"
                   src={
-                    localStorage.getItem("theme") === "dark"
+                    theme === "dark"
                       ? GithubDark
                       : Github
                   }
@@ -91,7 +100,7 @@ export function RegisterForm({
               <Button>
                 <Image
                   src={
-                    localStorage.getItem("theme") === "dark"
+                    theme === "dark"
                       ? GoogleDark
                       : Google
                   }

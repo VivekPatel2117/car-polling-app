@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import axios from "axios";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -25,6 +24,7 @@ export const PriceUpdate: React.FC<PriceUpdateProps> = ({
   currentPrice,
   onSuccess,
 }) => {
+  const [token, setToken] = useState("");
   const [newPrice, setNewPrice] = useState<number>(currentPrice);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -35,7 +35,6 @@ export const PriceUpdate: React.FC<PriceUpdateProps> = ({
     setError("");
 
     try {
-      const token = localStorage.getItem("token");
       const response = await axios.put(
         `/api/car/update`,
         {
@@ -55,11 +54,19 @@ export const PriceUpdate: React.FC<PriceUpdateProps> = ({
       }
     } catch (err) {
       setError("Failed to update price. Please try again.");
+      console.log("Error occured in PriceUpdate: ",err);
     } finally {
       setLoading(false);
     }
   };
-
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedToken = localStorage.getItem("token");
+      if (storedToken) {
+        setToken(storedToken);
+      }
+    }
+  }, []);
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>

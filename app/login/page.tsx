@@ -10,10 +10,10 @@ interface LoginResponse {
   profile?: string;
 }
 
-export default function Page() {
+export default function Login() {
   const { toast } = useToast();
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState<Boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const handleFormSubmit = (formData: { email: string; password: string }) => {
     setIsLoading(true);
     axios
@@ -38,6 +38,7 @@ export default function Page() {
           variant: "destructive",
           description: "Invalid email or password",
         });
+        console.log("Error occured in login: ",err)
         setIsLoading(false);
       });
   };

@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -18,7 +18,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Spinner from "@/components/Spinner";
 import { useSearchParams } from "next/navigation";
-export default function ResetPasswordPage() {
+
+function ResetPasswordPage() {
   const { toast } = useToast();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -50,20 +51,21 @@ export default function ResetPasswordPage() {
     }
 
     try {
-      const res = await axios.post("/api/forgot/reset", { email,newPassword });
+      const res = await axios.post("/api/forgot/reset", { email, newPassword });
 
       if (res.status === 200) {
         toast({
           variant: "default",
           description: "Password reset successfully!\n Please continue to login...",
         });
-        router.push("/login")
+        router.push("/login");
       }
     } catch (error) {
       toast({
         variant: "destructive",
         description: "Error resetting password",
       });
+      console.log("Error occurred in reset: ", error);
     } finally {
       setIsLoading(false);
     }
@@ -117,3 +119,11 @@ export default function ResetPasswordPage() {
     </form>
   );
 }
+
+const Page = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <ResetPasswordPage />
+  </Suspense>
+);
+
+export default Page;

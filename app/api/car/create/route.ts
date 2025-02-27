@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
     try {
       body = await req.json();
     } catch (error) {
-      return NextResponse.json({ error: "Invalid JSON payload" }, { status: 400 });
+      return NextResponse.json({ error: `Invalid JSON payload: ${error}` }, { status: 400 });
     }
 
     const { model, type, company, price, image, location } = body;

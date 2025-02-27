@@ -1,4 +1,4 @@
-const Spinner = ({isOpen}:{isOpen:Boolean}) => {
+const Spinner = ({isOpen}:{isOpen:boolean}) => {
     return (
       <>
       {isOpen &&
