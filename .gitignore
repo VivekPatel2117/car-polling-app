@@ -18,8 +18,11 @@
 /out/
 .next/
 
+
 # production
 /build
+
+zia11452
 
 # misc
 .DS_Store
