@@ -64,6 +64,12 @@ export const Navbar = () => {
         router.push("/myorder");
       },
     },
+    {
+      name: "Logout",
+      clickFunc: () => {
+        router.push("/logout");
+      },
+    },
   ]
   const NestMenuArr = [
     {
@@ -88,6 +94,12 @@ export const Navbar = () => {
       name: "Your orders",
       clickFunc: () => {
         router.push("/myorder");
+      },
+    },
+    {
+      name: "Logout",
+      clickFunc: () => {
+        router.push("/logout");
       },
     },
   ];

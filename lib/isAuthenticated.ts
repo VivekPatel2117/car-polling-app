@@ -3,6 +3,7 @@ const SECRET_KEY = process.env.JWT_SECRET;
 import { NextRequest } from "next/server";
 export async function isAuthenticated(req: NextRequest) {
   const authHeader = req.headers.get("authorization");
+  console.log(authHeader)
   if (!authHeader || !authHeader.startsWith("Bearer")) {
     return null;
   }

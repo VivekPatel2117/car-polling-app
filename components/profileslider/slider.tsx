@@ -85,22 +85,17 @@ export default function Slider({ open, setOpen }: SliderProps) {
       setIsLoading(false);
     }
   };
-
   useEffect(() => {
-    if (open) {
-      if (token) {
-        handleGETUser(token);
+    if(open){
+      if (typeof window !== "undefined") {
+        const storedToken = localStorage.getItem("token");
+        if (storedToken) {
+          setToken(storedToken);
+          handleGETUser(storedToken);
+        }
       }
     }
   }, [open]);
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedToken = localStorage.getItem("token");
-      if (storedToken) {
-        setToken(storedToken);
-      }
-    }
-  }, []);
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>

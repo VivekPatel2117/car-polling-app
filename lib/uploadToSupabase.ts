@@ -21,7 +21,6 @@ const uploadToSupabaseStorage = async ({
     console.error("Upload error:", error.message);
     return null;
   }
-  console.log(data)
 
   // Get the public URL of the uploaded file
   const { data: publicUrlData } = supabase.storage.from(bucket).getPublicUrl(filePath);

@@ -7,7 +7,8 @@ export const config = {
 };
 
 export async function middleware(req:NextRequest) {
-    const isAuth = await isAuthenticated(req)
+    let isAuth = await isAuthenticated(req)
+    isAuth = JSON.parse(isAuth as string);
   if (!isAuth) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }

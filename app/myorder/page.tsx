@@ -92,7 +92,7 @@ export default function Page() {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState("");
   const [token, setToken] = useState("");
-  const fetchUserBookings = async () => {
+  const fetchUserBookings = async (token: string) => {
     try {
       const response = await axios.get("/api/car/book/manage", {
         headers: {
@@ -116,11 +116,11 @@ export default function Page() {
     }
   };
   useEffect(() => {
-    fetchUserBookings();
     if (typeof window !== "undefined") {
       const storedToken = localStorage.getItem("token");
       if (storedToken) {
         setToken(storedToken);
+        fetchUserBookings(storedToken);
       }
     }
   }, []); // Empty array to run once when the component mounts
